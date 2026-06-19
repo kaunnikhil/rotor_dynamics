@@ -17,7 +17,7 @@ class DiskElement:
         self.Ip = Ip
 
     def get_mass_matrix(self):
-        """Returns the 4 cross 4 mass matrix for the disk."""
+       # returns the 4 cross 4 mass matrix for the disk.
         return np.array([
             [self.m, 0, 0, 0],
             [0, self.m, 0, 0],
@@ -26,7 +26,7 @@ class DiskElement:
         ])
 
     def get_gyroscopic_matrix(self):
-        """Returns the 4 cross 4 gyroscopic matrix for the disk."""
+        #returns the 4 cross 4 gyroscopic matrix for the disk.
         return np.array([
             [0, 0, 0, 0],
             [0, 0, 0, 0],
@@ -37,7 +37,7 @@ class DiskElement:
 
 class ShaftElement:
     """
-    Represents a Timoshenko hollow shaft finite element.
+    represents a Timoshenko hollow shaft finite element.
     Calculates the 8 cross 8 matrices for a 2-node, 4 DOF per node element.
     """
     def __init__(self, L, d_o, d_i, E, G, rho):
@@ -48,19 +48,18 @@ class ShaftElement:
         self.G = G
         self.rho = rho
         
-        # Cross-sectional properties
+        # cross sectional properties
         self.A = (np.pi / 4) * (self.d_o**2 - self.d_i**2)
         self.I = (np.pi / 64) * (self.d_o**4 - self.d_i**4)
         
-        # Shear shape factor (kappa) for a hollow circular cross-section
-        # A common approximation for thin-walled tubes is ~0.5, but we use the exact formula:
+        # kappa shear shape factor for a hollow circular cross-section where we use the exact formula, not 0.5 approx'n
         m_ratio = self.d_i / self.d_o
         self.kappa = 6 * (1 + m_ratio**2)**2 / (7 + 34*m_ratio**2 + 7*m_ratio**4)
         
-        # Transverse shear effect parameter (Phi)
+        # phi transverse shear effect parameter
         self.Phi = (12 * self.E * self.I) / (self.kappa * self.A * self.G * self.L**2)
         
-        # Mass per unit length
+        # mass per unit length
         self.mu = self.rho * self.A
 
     def get_stiffness_matrix(self):
@@ -69,13 +68,13 @@ class ShaftElement:
         EI = self.E * self.I
         P = self.Phi
         
-        # Constant multiplier
+        # constant multiplier
         c = EI / (L**3 * (1 + P))
         
-        # components based on Nelson's Timoshenko formulation
+        # components based on Nelson Timoshenko formulation
         K = np.zeros((8, 8))
         
-        # Y-Z decoupled bending (Standard 4x4 beam stiffness expanded to 8x8)
+        # Y-Z decoupled bending 
 
         K[0,0] = 12;          K[0,3] = 6*L;                 K[0,4] = -12;         K[0,7] = 6*L
         K[3,0] = K[0,3];      K[3,3] = L**2 * (4 + P);      K[3,4] = -6*L;        K[3,7] = L**2 * (2 - P)
@@ -91,15 +90,10 @@ class ShaftElement:
         return c * K
 
     def get_mass_matrix(self):
-        """Returns the 8x8 translational mass matrix [M_e]. 
-        (Note: For a fully Elite model, rotary inertia terms are added here. 
-        We are starting with consistent translational mass for clarity)."""
+        #returns the 8x8 translational mass matrix [M_e]. 
         L = self.L
         P = self.Phi
         c = (self.mu * L) / 420
-        
-        # Simplified Euler-Bernoulli consistent mass matrix structure for demonstration.
-        # In the next iteration, we will inject the exact Timoshenko mass parameters.
         M = np.zeros((8, 8))
         
         # Y-Z decoupled
