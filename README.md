@@ -1,10 +1,17 @@
-#  Real-Time Digital Twin of a 4-Disk Hollow Flexible Shaft Rotor
+# Real-Time Digital Twin of a 4-Disk Hollow Flexible Shaft Rotor
 
 > *What if we could predict a rotor's future before it starts vibrating?*
 
+### Live Digital Twin Demo
+
+**Try it here:**  
+http://rotordynamics-hw2sf7cppvfuubffellqgk.streamlit.app/
+
+*Adjust rotor geometry, disk mass, and bearing stiffness to see real-time predictions of natural frequencies and operational behavior without running a full finite element simulation.*
+
 A high-fidelity Digital Twin framework that combines **Rotor Dynamics**, **Finite Element Analysis (FEA)**, and **Machine Learning** to predict the dynamic behavior of a multi-disk flexible rotor system in real time.
 
-Instead of solving computationally expensive physics equations every time operating conditions change, this project trains an AI surrogate model capable of instantly estimating:
+Instead of solving computationally expensive physics equations every time operating conditions change, this project trains a Machine Learning surrogate model capable of instantly estimating:
 
 - Critical Speeds
 - Natural Frequencies
@@ -12,7 +19,7 @@ Instead of solving computationally expensive physics equations every time operat
 - Resonance Regions
 - Vibration Amplitudes
 
-The result is a Digital Twin that thinks like a physics simulator but responds at the speed of machine learning.
+The result is a Digital Twin that captures the behavior of a physics-based simulation while delivering predictions in milliseconds.
 
 ---
 
@@ -29,35 +36,9 @@ This project bridges that gap by creating a Digital Twin that:
 * Learns from thousands of FEM simulations
 * Predicts rotor behavior in milliseconds
 * Enables predictive maintenance strategies
-* Demonstrates how AI can accelerate classical mechanical engineering workflows
+* Demonstrates how Machine Learning can accelerate classical mechanical engineering workflows
 
-Think of it as teaching a machine-learning model to become a rotor dynamics expert.
-
----
-
-#  System Architecture
-
-```text
-Rotor Geometry
-      │
-      ▼
-Finite Element Model
-      │
-      ▼
-10,000+ Simulations
-      │
-      ▼
-Dataset Generation
-      │
-      ▼
-Gaussian Process Regression
-      │
-      ▼
-Real-Time Predictions
-      │
-      ▼
-Interactive Digital Twin Dashboard
-```
+Think of it as teaching a machine-learning model the behavior of a rotor dynamics simulator.
 
 ---
 
@@ -167,7 +148,6 @@ Features:
 
 * Git
 * GitHub
-* Jupyter Notebook
 
 ---
 
