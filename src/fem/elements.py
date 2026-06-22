@@ -1,3 +1,4 @@
+#below script fetches the Me, Md, K and the G  matrices required in the finite rotor element equation of motion subjected to gyroscopic effects
 import numpy as np
 
 class DiskElement:
@@ -16,8 +17,8 @@ class DiskElement:
         self.Id = Id
         self.Ip = Ip
 
-    def get_mass_matrix(self):
-       # returns the 4 cross 4 mass matrix for the disk.
+    def get_mass_matrix(self): #gets the {Md}
+        #4 cross 4 mass matrix bcoz disc represents 1 node having 4DOF {y, z, theta-y, theta-z}
         return np.array([
             [self.m, 0, 0, 0],
             [0, self.m, 0, 0],
@@ -25,7 +26,7 @@ class DiskElement:
             [0, 0, 0, self.Id]
         ])
 
-    def get_gyroscopic_matrix(self):
+    def get_gyroscopic_matrix(self): #gets the [G]
         #returns the 4 cross 4 gyroscopic matrix for the disk.
         return np.array([
             [0, 0, 0, 0],
@@ -43,26 +44,27 @@ class ShaftElement:
     def __init__(self, L, d_o, d_i, E, G, rho):
         self.L = L
         self.d_o = d_o
-        self.d_i = d_i
-        self.E = E
-        self.G = G
-        self.rho = rho
+        self.d_i = d_i #
+        self.E = E #youngs modulus 
+        self.G = G #shear modulus
+        self.rho = rho #density
         
         # cross sectional properties
         self.A = (np.pi / 4) * (self.d_o**2 - self.d_i**2)
-        self.I = (np.pi / 64) * (self.d_o**4 - self.d_i**4)
+        self.I = (np.pi / 64) * (self.d_o**4 - self.d_i**4)#this is the bending inertia
         
         # kappa shear shape factor for a hollow circular cross-section where we use the exact formula, not 0.5 approx'n
+        # it represents the part in CSA that effectively resists shear hence shear stiffness = kappa*G*A
         m_ratio = self.d_i / self.d_o
         self.kappa = 6 * (1 + m_ratio**2)**2 / (7 + 34*m_ratio**2 + 7*m_ratio**4)
         
         # phi transverse shear effect parameter
         self.Phi = (12 * self.E * self.I) / (self.kappa * self.A * self.G * self.L**2)
         
-        # mass per unit length
+        # mass per unit length= density * CSA
         self.mu = self.rho * self.A
 
-    def get_stiffness_matrix(self):
+    def get_stiffness_matrix(self): #gets the {Ke}
         """Returns the 8x8 symmetric stiffness matrix for a Timoshenko beam."""
         L = self.L
         EI = self.E * self.I
@@ -89,8 +91,8 @@ class ShaftElement:
         
         return c * K
 
-    def get_mass_matrix(self):
-        #returns the 8x8 translational mass matrix [M_e]. 
+    def get_mass_matrix(self):#gets the {Me}
+        #returns the 8 cros 8 translational mass matrix [M_e]. 
         L = self.L
         P = self.Phi
         c = (self.mu * L) / 420

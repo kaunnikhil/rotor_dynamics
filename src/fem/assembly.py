@@ -53,7 +53,6 @@ class RotorAssembly:
         for node, bearing_props in self.bearings.items():
             idx = node * self.dof_per_node
             
-       
             kyy = bearing_props.get('kyy', 0)
             kzz = bearing_props.get('kzz', 0)
             
